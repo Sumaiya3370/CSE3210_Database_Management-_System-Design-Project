@@ -1,0 +1,195 @@
+DROP TABLE Employee;
+DROP TABLE Readers;
+DROP TABLE Books;
+DROP TABLE Staffs;
+DROP TABLE Librarian;
+DROP TABLE DBA;
+DROP TABLE FreeReader;
+DROP TABLE PaidReader;
+DROP TABLE FreeBook;
+DROP TABLE PaidBook;
+DROP TABLE Authentication;
+
+
+create table Employee(
+EID varchar2(5),
+FNAME varchar2(10),
+LNAME varchar2(10),
+EAddress varchar2(10),
+EJob varchar2(10),
+ESAL number(5),
+primary key(EID)
+);
+create table Readers(
+RID varchar2(5),
+FNAME varchar2(10),
+LNAME varchar2(10),
+RCNO number(10),
+RTYPE varchar2(5),
+primary key(RID)
+);
+create table Books(
+ BID varchar2(5),
+ISBN number(5),
+BName varchar2(40),
+BPUB  varchar2(30),
+BType varchar2(5),
+BAvail varchar2(1),
+primary key(BID)
+);
+create table Staffs(
+EID varchar2(5) references Employee(EID),
+SName varchar2(10));
+create table Librarian(
+EID varchar2(5) references Employee(EID),
+LiName varchar2(10));
+create table DBA(
+EID varchar2(5) references Employee(EID),
+DName varchar2(10));
+create table FreeReader(
+RID varchar2(5) references Readers(RID),
+BID varchar2(5) references Books(BID),
+S_O_Trial Date,
+E_O_Trial Date);
+create table PaidReader(
+RID varchar2(5) references Readers(RID),
+BID varchar2(5) references Books(BID),
+Sub_Rate Number,
+I_Date Date,
+R_Date Date);
+
+
+
+CREATE TABLE FreeBook (
+    BID VARCHAR2(5) REFERENCES Books(BID),
+    RID VARCHAR2(5) REFERENCES Readers(RID),
+    BQuantity NUMBER(3)
+);
+
+CREATE TABLE PaidBook (
+    BID VARCHAR2(5) REFERENCES Books(BID),
+    RID VARCHAR2(5) REFERENCES Readers(RID),
+    BPrice NUMBER(3),
+    BQuantity NUMBER(3)
+);
+
+
+CREATE TABLE Authentication (
+    UserName VARCHAR2(10) PRIMARY KEY,
+    "Password" VARCHAR2(10)
+);
+
+
+INSERT INTO Employee(EID, FName, LName, EAddress, EJob, ESAL) 
+VALUES ('E001', 'Faraz', 'Ahmed', 'Khulna', 'Librarian', 10000);
+
+INSERT INTO Employee (EID, FName, LName, EAddress, EJob, ESAL) VALUES ('E002', 'Kabir', 'Karim','Khulna', 'Librarian',10000);
+
+INSERT INTO Employee (EID, FName, LName, EAddress, EJob, ESAL) VALUES ('E003', 'Anita', 'Ahmed','Dhaka', 'Staff',15000);
+
+INSERT INTO Employee (EID, FName, LName, EAddress, EJob, ESAL) VALUES ('E004', 'Faysal', 'Islam','Dhaka', 'Staff',15000);
+INSERT INTO Employee (EID, FName, LName, EAddress, EJob, ESAL) VALUES ('E005', 'Sagor', 'Khan','Dhaka', 'Staff',15000);
+INSERT INTO Employee (EID, FName, LName, EAddress, EJob, ESAL) VALUES ('E006', 'Maliha', 'Khan','Barishal', 'DBA',30000);
+INSERT INTO Employee (EID, FName, LName, EAddress, EJob, ESAL) VALUES ('E007', 'Maria', 'Khan','Khulna', 'DBA',30000);
+
+INSERT INTO Readers (RID, FNAME, LNAME, RCNO, RTYPE ) VALUES ('R001', 'Sumaiya','Alam' ,01705723393,'Free');
+INSERT INTO Readers (RID, FNAME, LNAME, RCNO, RTYPE ) VALUES ('R002', 'Faria','Rafa' ,01704567832,'Paid');
+INSERT INTO Readers (RID, FNAME, LNAME, RCNO, RTYPE ) VALUES ('R003', 'Bushra','Saima' ,01704567834,'Paid');
+INSERT INTO Readers (RID, FNAME, LNAME, RCNO, RTYPE ) VALUES ('R004', 'Borno','Mirza' ,01704567543,'Free');
+INSERT INTO Readers (RID, FNAME, LNAME, RCNO, RTYPE ) VALUES ('R005', 'Raatul','Khan' ,01704567450,'Paid');
+INSERT INTO Readers (RID, FNAME, LNAME, RCNO, RTYPE ) VALUES ('R006', 'Alvi','Ayon' ,01704567509,'Free');
+
+INSERT INTO Books(BID,ISBN,BName,BPUB,BType,BAvail) VALUES ('B001','9780','Com_Systems','Wiley','Paid','Y');
+INSERT INTO Books(BID,ISBN,BName,BPUB,BType,BAvail) VALUES ('B002','2345','Micro_Circuits','Oxford','Paid','Y');
+INSERT INTO Books(BID,ISBN,BName,BPUB,BType,BAvail) VALUES ('B003','2374','Digital_Processing','Pearson','Paid','Y');
+INSERT INTO Books(BID,ISBN,BName,BPUB,BType,BAvail) VALUES ('B004','2309','Electromagnetic_Waves','W._Company','Free','Y');
+
+INSERT INTO Books(BID,ISBN,BName,BPUB,BType,BAvail) VALUES ('B005','4567','Electronic_Circuit Theory','Pearson','Paid','N');
+
+INSERT INTO Books(BID,ISBN,BName,BPUB,BType,BAvail) VALUES ('B006','4237','Digital Communication',' Wiley','Free','N');
+
+INSERT INTO Staffs(EID,SName) VALUES ('E003', 'Anita');
+INSERT INTO Staffs(EID,SName) VALUES ('E004', 'Faysal');
+INSERT INTO Staffs(EID,SName) VALUES ('E005', 'Sagor');
+  
+INSERT INTO Librarian(EID,LiName) VALUES('E001', 'Faraz');
+INSERT INTO Librarian(EID,LiName) VALUES ('E002', 'Kabir');
+
+
+
+INSERT INTO DBA(EID,DName) VALUES('E006', 'Maliha');
+INSERT INTO DBA(EID,DName) VALUES ('E007', 'Maria');
+
+
+INSERT INTO FreeReader(RID, BID, S_O_Trial, E_O_Trial)
+VALUES ('R001', 'B004', TO_DATE('2023-04-25', 'YYYY-MM-DD'), TO_DATE('2023-05-25', 'YYYY-MM-DD'));
+INSERT INTO FreeReader(RID, BID, S_O_Trial, E_O_Trial)
+VALUES ('R004', 'B006', TO_DATE('2023-03-28', 'YYYY-MM-DD'), TO_DATE('2023-04-28', 'YYYY-MM-DD'));
+
+
+INSERT INTO PaidReader(RID, BID, Sub_Rate, I_Date,R_Date )
+VALUES ('R002', 'B001', '150', TO_DATE('2023-02-28', 'YYYY-MM-DD'), TO_DATE('2023-03-28', 'YYYY-MM-DD'));
+INSERT INTO PaidReader(RID, BID, Sub_Rate, I_Date,R_Date )
+VALUES ('R003', 'B002', '200', TO_DATE('2023-01-08', 'YYYY-MM-DD'), TO_DATE('2023-02-08', 'YYYY-MM-DD'));
+INSERT INTO PaidReader(RID, BID, Sub_Rate, I_Date,R_Date )
+VALUES ('R005', 'B003', '250', TO_DATE('2023-04-08', 'YYYY-MM-DD'), TO_DATE('2023-05-08', 'YYYY-MM-DD'));
+
+
+INSERT INTO FreeBook(BID, RID, BQuantity)
+VALUES ('B004','R001',10);
+INSERT INTO FreeBook(BID, RID, BQuantity)
+VALUES ('B006','R006',15);
+INSERT INTO FreeBook(BID, RID, BQuantity)
+VALUES ('B004','R004',18);
+
+INSERT INTO PaidBook(BID, RID, BPrice,BQuantity)
+VALUES ('B001','R002',250,10);
+INSERT INTO PaidBook(BID, RID, BPrice,BQuantity)
+VALUES ('B002','R003',150,15);
+INSERT INTO PaidBook(BID, RID, BPrice,BQuantity)
+VALUES ('B003','R005',270,20);
+INSERT INTO PaidBook(BID, RID, BPrice,BQuantity)
+VALUES ('B005','R002',130,15);
+
+
+INSERT INTO Authentication(UserName, "Password") VALUES ('AN_A', 'ECE');
+INSERT INTO Authentication(UserName, "Password") VALUES ('KA_R', 'ECE');
+INSERT INTO Authentication(UserName, "Password") VALUES ('FA_Z', 'ECE');
+INSERT INTO Authentication(UserName, "Password") VALUES ('SA_R', 'ECE');
+INSERT INTO Authentication(UserName, "Password") VALUES ('MA_A', 'ECE');
+
+select *from Employee;
+select *from Readers;
+select *from Books;
+select *from Readers;
+select *from Staffs;
+select *from Librarian;
+select *from DBA;
+select *from FreeReader;
+select *from PaidReader;
+select *from FreeBook;
+select *from PaidBook;
+select *from Authentication;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
